@@ -1,4 +1,4 @@
-CentralDesktop PHP Spl Library.
+CentralDesktop Spl (Standard PHP Library).
 
 Library includes basic Graph data structure.
 
