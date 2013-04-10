@@ -110,7 +110,7 @@ class GraphTest extends \PHPUnit_Framework_TestCase {
                 $contains_graph,
                 $edge,
                 false,
-                array(),
+                array($a, $b),
                 array($edge)
             ),
             array(
@@ -123,16 +123,16 @@ class GraphTest extends \PHPUnit_Framework_TestCase {
             array(
                 $contains_a_graph,
                 $edge,
-                false,
-                array($a),
-                array()
+                true,
+                array($a, $b),
+                array($edge)
             ),
             array(
                 $contains_b_graph,
                 $edge,
-                false,
-                array($b),
-                array()
+                true,
+                array($a, $b),
+                array($edge)
             ),
             array(
                 $contains_c_graph,
@@ -142,33 +142,5 @@ class GraphTest extends \PHPUnit_Framework_TestCase {
                 array($edge)
             )
         );
-    }
-
-    /**
-     * Add an Edge(u, v) to Graph
-     *
-     * A vertex can only exist once in the graph.
-     * If at least one vertex fails to be added this method will return false.
-     *
-     * @param Edge $edge
-     * @return bool
-     */
-    public function add_edge(Edge $edge) {
-        if ($this->edges->contains($edge)) {
-            return false;
-        }
-
-        $source = $edge->get_source();
-        $target = $edge->get_target();
-
-        if($this->add_vertex($source)) {
-            if ($this->add_vertex($target)) {
-                $this->edges->attach($edge);
-                return true;
-            } else {
-                $this->vertices->detach($source);
-            }
-        }
-        return false;
     }
 }

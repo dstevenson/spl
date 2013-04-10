@@ -89,15 +89,22 @@ abstract class Graph {
         $source = $edge->get_source();
         $target = $edge->get_target();
 
-        if($this->add_vertex($source)) {
-            if ($this->add_vertex($target)) {
-                $this->edges->attach($edge);
-                return true;
-            } else {
-                $this->vertices->detach($source);
-            }
+        /**
+         * Update vertices if needed.
+         */
+        $this->add_vertex($source);
+        $this->add_vertex($target);
+
+        /**
+         * If either vertex is missing this would be an invalid edge
+         */
+        if (!$this->vertices->contains($source) ||
+            !$this->vertices->contains($target)) {
+            return false;
         }
-        return false;
+
+        $this->edges->attach($edge);
+        return true;
     }
 
     /**
