@@ -31,6 +31,37 @@ use CentralDesktop\Spl;
  */
 class DirectedGraph extends Spl\Graph {
 
+    /**
+     * @param Spl\Vertex $source
+     * @param Spl\Vertex $target
+     * @return Spl\Edge|null
+     */
+    public function get_edge(Spl\Vertex $source, Spl\Vertex $target) {
+        if ($this->vertices->contains($source) &&
+            $this->vertices->contains($target)) {
+
+            $edges = $this->get_outgoing_edges_of($source);
+            /**
+             * @var $edge Spl\Edge
+             */
+            foreach ($edges as $edge) {
+                if ($edge->get_target() === $target) {
+                    return $edge;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public function get_outgoing_edges_of(Spl\Vertex $vertex) {
+        $edges = new \SplObjectStorage();
+
+        // @TODO track this somewhere
+
+        return $this->get_edges();
+    }
+
     public function in_degree_of(Spl\Vertex $vertex) {
         return $vertex->predecessors->count();
     }

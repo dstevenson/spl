@@ -73,6 +73,13 @@ abstract class Graph {
     }
 
     /**
+     * @param Vertex $source
+     * @param Vertex $target
+     * @return Edge|null
+     */
+    abstract public function get_edge(Vertex $source, Vertex $target);
+
+    /**
      * Add an Edge(u, v) to Graph
      *
      * A vertex can only exist once in the graph.
