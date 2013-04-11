@@ -67,8 +67,9 @@ abstract class Graph {
     public function add_vertex(Vertex $vertex, \Closure $compare = null) {
         if (!($compare instanceof \Closure) || $compare()) {
             $this->vertices->attach($vertex);
+            return true;
         }
-        return true;
+        return false;
     }
 
     /**
