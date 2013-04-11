@@ -23,6 +23,7 @@ namespace CentralDesktop\Spl;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\NullLogger;
+use SplObjectStorage;
 
 /**
  * Class Edge
@@ -53,6 +54,11 @@ abstract class Edge {
     protected $target;
 
     /**
+     * @var SplObjectStorage
+     */
+    protected $vertices;
+
+    /**
      * @return Vertex
      */
     public function get_source() {
@@ -64,5 +70,12 @@ abstract class Edge {
      */
     public function get_target() {
         return $this->target;
+    }
+
+    /**
+     * @return SplObjectStorage
+     */
+    public function get_vertices() {
+        return $this->vertices;
     }
 }

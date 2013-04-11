@@ -31,5 +31,17 @@ use CentralDesktop\Spl;
  */
 class UndirectedGraph extends Spl\Graph {
 
+    public function degree_of(Spl\Vertex $vertex) {
+        $degree = 0;
+        /**
+         * @var Spl\Edge $edge
+         */
+        foreach ($this->get_edges() as $edge) {
+            if ($edge->get_vertices()->contains($vertex)) {
+                $degree++;
+            }
+        }
 
+        return $degree;
+    }
 }

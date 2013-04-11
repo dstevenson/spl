@@ -61,14 +61,13 @@ abstract class Graph {
 
     /**
      * @param Vertex $vertex
+     * @param callable $compare
      * @return bool
      */
-    public function add_vertex(Vertex $vertex) {
-        if ($this->vertices->contains($vertex)) {
-            return false;
+    public function add_vertex(Vertex $vertex, \Closure $compare = null) {
+        if (!($compare instanceof \Closure) || $compare()) {
+            $this->vertices->attach($vertex);
         }
-
-        $this->vertices->attach($vertex);
         return true;
     }
 
@@ -79,9 +78,10 @@ abstract class Graph {
      * If at least one vertex fails to be added this method will return false.
      *
      * @param Edge $edge
+     * @param callable $compare
      * @return bool
      */
-    public function add_edge(Edge $edge) {
+    public function add_edge(Edge $edge, \Closure $compare = null) {
         if ($this->edges->contains($edge)) {
             return false;
         }
@@ -92,8 +92,8 @@ abstract class Graph {
         /**
          * Update vertices if needed.
          */
-        $this->add_vertex($source);
-        $this->add_vertex($target);
+        $this->add_vertex($source, $compare);
+        $this->add_vertex($target, $compare);
 
         /**
          * If either vertex is missing this would be an invalid edge

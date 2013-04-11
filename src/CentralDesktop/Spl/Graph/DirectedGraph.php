@@ -31,5 +31,11 @@ use CentralDesktop\Spl;
  */
 class DirectedGraph extends Spl\Graph {
 
+    public function in_degree_of(Spl\Vertex $vertex) {
+        return $vertex->predecessors->count();
+    }
 
+    public function out_degree_of(Spl\Vertex $vertex) {
+        return $vertex->successors->count();
+    }
 }

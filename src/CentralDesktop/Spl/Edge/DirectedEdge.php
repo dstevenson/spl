@@ -39,11 +39,16 @@ class DirectedEdge extends Spl\Edge {
      * @param Spl\Vertex $target
      */
     public function __construct(Spl\Vertex $source, Spl\Vertex $target) {
+        $this->vertices = new \SplObjectStorage();
+
         $this->source = $source;
         $this->target = $target;
 
         $this->source->add_successor($target);
         $this->target->add_predecessor($source);
+
+        $this->vertices->attach($source);
+        $this->vertices->attach($target);
 
         $this->logger = new NullLogger();
     }

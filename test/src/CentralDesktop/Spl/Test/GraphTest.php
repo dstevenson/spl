@@ -11,11 +11,12 @@ class GraphTest extends \PHPUnit_Framework_TestCase {
      *
      * @param Spl\Graph $graph
      * @param Spl\Vertex $vertex
+     * @param \Closure $compare
      * @param bool $expected_return
      * @param array $expected_vertices
      */
-    public function testAddVertex(Spl\Graph $graph, Spl\Vertex $vertex, $expected_return, $expected_vertices) {
-        $this->assertEquals($expected_return, $graph->add_vertex($vertex));
+    public function testAddVertex(Spl\Graph $graph, Spl\Vertex $vertex, \Closure $compare = null, $expected_return, $expected_vertices) {
+        $this->assertEquals($expected_return, $graph->add_vertex($vertex, $compare));
         foreach ($expected_vertices as $vertex) {
             $this->assertTrue($graph->get_vertices()->contains($vertex));
         }
@@ -34,18 +35,38 @@ class GraphTest extends \PHPUnit_Framework_TestCase {
             ->setMethods(array('__construct'))
             ->getMockForAbstractClass();
 
+        $compare = function() {
+            return true;
+        };
+
         return array(
             array(
                 $contains_graph,
                 $vertex,
-                false,
+                null,
+                true,
                 array()
             ),
             array(
                 $does_not_contain_graph,
                 $vertex,
+                null,
                 true,
                 array($vertex)
+            ),
+            array(
+                $contains_graph,
+                $vertex,
+                $compare,
+                true,
+                array()
+            ),
+            array(
+                $does_not_contain_graph,
+                $vertex,
+                $compare,
+                true,
+                array()
             )
         );
     }

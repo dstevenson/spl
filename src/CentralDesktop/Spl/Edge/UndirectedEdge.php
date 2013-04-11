@@ -24,6 +24,7 @@ use CentralDesktop\Spl;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\NullLogger;
+use SplObjectStorage;
 
 /**
  * Class Edge
@@ -39,6 +40,7 @@ class UndirectedEdge extends Spl\Edge {
      * @param Spl\Vertex $target
      */
     public function __construct(Spl\Vertex $source, Spl\Vertex $target) {
+        $this->vertices = new SplObjectStorage();
         $this->source = $source;
         $this->target = $target;
 
@@ -46,6 +48,9 @@ class UndirectedEdge extends Spl\Edge {
         $this->source->add_predecessor($target);
         $this->target->add_successor($source);
         $this->target->add_predecessor($source);
+
+        $this->vertices->attach($source);
+        $this->vertices->attach($target);
 
         $this->logger = new NullLogger();
     }
