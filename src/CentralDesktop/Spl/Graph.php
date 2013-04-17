@@ -61,21 +61,22 @@ abstract class Graph {
 
     /**
      * @param Vertex $vertex
-     * @param callable $contains
      * @return bool
      */
-    public function add_vertex(Vertex $vertex, \Closure $contains = null) {
-        if ($contains instanceof \Closure) {
-            $contains_vertex = $contains();
-        } else {
-            $contains_vertex = $this->vertices->contains($vertex);
-        }
-
-        if (!$contains_vertex) {
+    public function add_vertex(Vertex $vertex) {
+        if (!$this->has_vertex($vertex)) {
             $this->vertices->attach($vertex);
-            $contains_vertex = true;
+            return true;
         }
-        return $contains_vertex;
+        return false;
+    }
+
+    /**
+     * @param Vertex $vertex
+     * @return bool
+     */
+    public function has_vertex(Vertex $vertex) {
+        return $this->vertices->contains($vertex);
     }
 
     /**
@@ -111,8 +112,8 @@ abstract class Graph {
         /**
          * If either vertex is missing this would be an invalid edge
          */
-        if (!$this->vertices->contains($source) ||
-            !$this->vertices->contains($target)) {
+        if (!$this->has_vertex($source) ||
+            !$this->has_vertex($target)) {
             return false;
         }
 

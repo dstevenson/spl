@@ -11,12 +11,16 @@ class GraphTest extends \PHPUnit_Framework_TestCase {
      *
      * @param Spl\Graph $graph
      * @param Spl\Vertex $vertex
-     * @param \Closure $compare
+     * @param bool $has_vertex
      * @param bool $expected_return
      * @param array $expected_vertices
      */
-    public function testAddVertex(Spl\Graph $graph, Spl\Vertex $vertex, \Closure $compare = null, $expected_return, $expected_vertices) {
-        $this->assertEquals($expected_return, $graph->add_vertex($vertex, $compare));
+    public function testAddVertex(Spl\Graph $graph, Spl\Vertex $vertex, $has_vertex, $expected_return, $expected_vertices) {
+        $graph->expects($this->any())
+            ->method('has_vertex')
+            ->will($this->returnValue($has_vertex));
+
+        $this->assertEquals($expected_return, $graph->add_vertex($vertex));
         foreach ($expected_vertices as $vertex) {
             $this->assertTrue($graph->get_vertices()->contains($vertex));
         }
@@ -26,46 +30,42 @@ class GraphTest extends \PHPUnit_Framework_TestCase {
         $vertex = new Spl\Vertex(null);
 
         $contains_graph = $this->getMockBuilder('\CentralDesktop\Spl\Graph')
-            ->setMethods(array('__construct'))
+            ->setMethods(array('__construct', 'has_vertex'))
             ->getMockForAbstractClass();
 
         $contains_graph->add_vertex($vertex);
 
         $does_not_contain_graph = $this->getMockBuilder('\CentralDesktop\Spl\Graph')
-            ->setMethods(array('__construct'))
+            ->setMethods(array('__construct', 'has_vertex'))
             ->getMockForAbstractClass();
-
-        $contains = function() {
-            return false;
-        };
 
         return array(
             array(
                 $contains_graph,
                 $vertex,
-                null,
                 true,
+                false,
                 array()
             ),
             array(
                 $does_not_contain_graph,
                 $vertex,
-                null,
+                false,
                 true,
                 array($vertex)
             ),
             array(
-                $contains_graph,
+                clone($contains_graph),
                 $vertex,
-                $contains,
+                false,
                 true,
-                array()
+                array($vertex)
             ),
             array(
-                $does_not_contain_graph,
+                clone($does_not_contain_graph),
                 $vertex,
-                $contains,
                 true,
+                false,
                 array()
             )
         );
