@@ -35,7 +35,7 @@ class GraphTest extends \PHPUnit_Framework_TestCase {
             ->setMethods(array('__construct'))
             ->getMockForAbstractClass();
 
-        $compare = function() {
+        $contains = function() {
             return false;
         };
 
@@ -57,15 +57,15 @@ class GraphTest extends \PHPUnit_Framework_TestCase {
             array(
                 $contains_graph,
                 $vertex,
-                $compare,
-                false,
+                $contains,
+                true,
                 array()
             ),
             array(
                 $does_not_contain_graph,
                 $vertex,
-                $compare,
-                false,
+                $contains,
+                true,
                 array()
             )
         );

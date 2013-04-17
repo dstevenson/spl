@@ -61,15 +61,21 @@ abstract class Graph {
 
     /**
      * @param Vertex $vertex
-     * @param callable $compare
+     * @param callable $contains
      * @return bool
      */
-    public function add_vertex(Vertex $vertex, \Closure $compare = null) {
-        if (!($compare instanceof \Closure) || $compare()) {
-            $this->vertices->attach($vertex);
-            return true;
+    public function add_vertex(Vertex $vertex, \Closure $contains = null) {
+        if ($contains instanceof \Closure) {
+            $contains_vertex = $contains();
+        } else {
+            $contains_vertex = $this->vertices->contains($vertex);
         }
-        return false;
+
+        if (!$contains_vertex) {
+            $this->vertices->attach($vertex);
+            $contains_vertex = true;
+        }
+        return $contains_vertex;
     }
 
     /**
@@ -86,10 +92,9 @@ abstract class Graph {
      * If at least one vertex fails to be added this method will return false.
      *
      * @param Edge $edge
-     * @param callable $compare
      * @return bool
      */
-    public function add_edge(Edge $edge, \Closure $compare = null) {
+    public function add_edge(Edge $edge) {
         if ($this->edges->contains($edge)) {
             return false;
         }
@@ -100,8 +105,8 @@ abstract class Graph {
         /**
          * Update vertices if needed.
          */
-        $this->add_vertex($source, $compare);
-        $this->add_vertex($target, $compare);
+        $this->add_vertex($source);
+        $this->add_vertex($target);
 
         /**
          * If either vertex is missing this would be an invalid edge
@@ -112,6 +117,15 @@ abstract class Graph {
         }
 
         $this->edges->attach($edge);
+        return true;
+    }
+
+    /**
+     * @param Edge $edge
+     * @return bool
+     */
+    public function remove_edge(Edge $edge) {
+        $this->get_edges()->detach($edge);
         return true;
     }
 
