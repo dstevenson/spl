@@ -96,7 +96,7 @@ abstract class Graph {
      * @return bool
      */
     public function add_edge(Edge $edge) {
-        if ($this->edges->contains($edge)) {
+        if ($this->has_edge($edge)) {
             return false;
         }
 
@@ -109,16 +109,16 @@ abstract class Graph {
         $this->add_vertex($source);
         $this->add_vertex($target);
 
-        /**
-         * If either vertex is missing this would be an invalid edge
-         */
-        if (!$this->has_vertex($source) ||
-            !$this->has_vertex($target)) {
-            return false;
-        }
-
         $this->edges->attach($edge);
         return true;
+    }
+
+    /**
+     * @param Edge $edge
+     * @return bool
+     */
+    public function has_edge(Edge $edge) {
+        return $this->edges->contains($edge);
     }
 
     /**

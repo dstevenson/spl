@@ -37,8 +37,8 @@ class DirectedGraph extends Spl\Graph {
      * @return Spl\Edge|null
      */
     public function get_edge(Spl\Vertex $source, Spl\Vertex $target) {
-        if ($this->vertices->contains($source) &&
-            $this->vertices->contains($target)) {
+        if ($this->has_vertex($source) &&
+            $this->has_vertex($target)) {
 
             $edges = $this->get_outgoing_edges_of($source);
             /**
